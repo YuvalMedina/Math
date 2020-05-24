@@ -19,6 +19,7 @@ uniform float u_time;       // Time in seconds since load
 
 #define e1OvE 1.44466                // e^(1/e) is the upper bound for real-number tetration.
 #define eNegE 0.06598803585          // e^(-e), the lower bound for real-number tetration.
+#define infinity 1.0/0.0             // maximum float aka infinity
 
 // complex multiplication:
 vec2 cmul(in vec2 a, in vec2 b) {
@@ -50,6 +51,7 @@ vec2 tetration(in vec2 a, in int b){
     vec2 t = vec2(1,0);
     for(int i = 0; i < 100; i++){
         if(i >= b) break;
+        if(t.x > log(infinity) || t.y > log(infinity)) return vec2(infinity);
         t = cpow(a,t);
     }
     return t;
@@ -87,9 +89,8 @@ void main(){
     // ^ scaling, do not change..~~~~
 
     vec2 val = tetration(c_scaled,100);
-    float r = length(val); //magnitude
-
-    // log scale
+    
+    float r = length(val);
     r = log(r);
 
     gl_FragColor = vec4(r,r,r,1.);
