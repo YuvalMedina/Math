@@ -53,10 +53,10 @@ float plotYRange(vec2 xy, float c, vec2 range){
 }
 
 float drawCobweb(float b, vec2 xy, vec2 maxDim){
-    if(xy.y < xy.x || xy.y > pow(b,xy.x)) return 0.;
+    if(xy.x < 0. || xy.y < xy.x) return 0.;
     float t = 1.;
+    float bt = b;
     for(int i = 0; i < 10; i++){
-        float bt = pow(b,t);
         if(bt > maxDim.y) break;
         float plot = plotXRange(xy, t, vec2(t, bt));
         if(plot != 0.){
@@ -68,20 +68,21 @@ float drawCobweb(float b, vec2 xy, vec2 maxDim){
             return plot;
         }
         t = bt;
+        bt = pow(b,t);
     }
     return 0.;
 }
 
 void main(){
-    float b = sin(u_time/1.2)/2.+1.25;
+    float b = sin(u_time/3.)*.76+.77;
     
     vec2 xy = gl_FragCoord.xy/u_resolution;
 
     float width = u_resolution[0];
     float height = u_resolution[1];
 
-    float scalar = 12.;
-    float displacement = scalar/2.; // negative and positive sides are symmetric
+    float scalar = 5.;
+    float displacement = (scalar/2.,scalar/8.); // negative and positive sides are symmetric
 
     float xscale = scalar;
     float yscale = height/width * scalar;
